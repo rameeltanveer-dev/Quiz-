@@ -50,7 +50,7 @@ const BANK = [
   {q:"Which selects class in CSS?", a:".classname", o:["#classname",".classname","classname","*classname"], topic:"Misc"},
   {q:"Which property centers inline text?", a:"text-align", o:["align","text-align","center-inline","inline-align"], topic:"Misc"}
 ];
-}
+
 /* ---------- STATE ---------- */
 let userName = null;
 let questions = [];
@@ -91,13 +91,8 @@ function markAttempt(name){ const key = `quiz_attempt_${name.toLowerCase()}`; lo
 startWithName.addEventListener('click', ()=>{
   const val = nameInput.value.trim();
   loginMsg.textContent = "";
- if(!val){ 
-    loginMsg.textContent = "براہِ کرم اپنا نام لکھیں / Please enter your name"; 
-    return; 
-}if(!canAttempt(val)){ 
-    loginMsg.textContent = "اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے / This device has already attempted the quiz with this name"; 
-    return; 
-}
+  if(!val){ loginMsg.textContent = "براہِ کرم اپنا نام لکھیں"; return; }
+  if(!canAttempt(val)){ loginMsg.textContent = "اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے"; return; }
   userName = val; markAttempt(userName); beginQuiz();
 });
 
@@ -212,55 +207,48 @@ function goNextAfterAuto(){
 }
 
 /* ---------- FINISH QUIZ ---------- */
-function finishQuiz() {
-  stopGlobalTimer();
-  stopQuestionTimer();
-
+function finishQuiz(){
+  stopGlobalTimer(); stopQuestionTimer();
   const total = questions.length;
-  const percent = Math.round((correct / total) * 100);
+  const percent = Math.round((correct/total)*100);
 
   // Decide celebration level
-  if (percent >= 90) {
-    // VIP Celebration
+  if(percent >= 90){
+    // VIP
     showResultModal({
       title: "👑 VIP فتح!",
       message: `زبردست! آپ نے ${percent}% حاصل کیے — VIP Celebration!`,
       emoji: "👑",
       type: "vip"
     });
-    try { playVIPMelody(); } catch (e) { console.warn(e); }
+    // VIP sound using WebAudio
+    try { playVIPMelody(); } catch(e){ console.warn(e); }
     playVIPConfetti();
-
-  } else if (percent >= 70) {
-    // Normal Celebration (70–89%)
+  } else if(percent >= 70){
+    // Normal celebration
     showResultModal({
-      title: "🎉 مبارک ہو! / Congratulations!",
-      message: `آپ نے ${percent}% حاصل کیے — شاندار کارکردگی! / You scored ${percent}% — Excellent performance!`,
+      title: "🎉 مبارک ہو!",
+      message: `آپ نے ${percent}% حاصل کیے — شاندار کارکردگی!`,
       emoji: "🎊",
       type: "success"
     });
-    try {
-      fireworksAudio.currentTime = 0;
-      fireworksAudio.play(); // 🔥 Safe autoplay
-    } catch (e) { console.warn(e); }
+    try { fireworksAudio.currentTime = 0; fireworksAudio.play(); } catch(e){}
     playFireworks();
-
   } else {
-    // Better Luck (<70%)
+    // Better luck
     showResultModal({
-      title: "😌 کوشش جاری رکھیں / Keep Trying",
-      message: `Better luck next time — آپ نے ${percent}% حاصل کیے۔ کوشش کریں، آپ بہتر کریں گے! / You scored ${percent}%. Keep trying, you can do better!`,
+      title: "😌 کوشش جاری رکھیں",
+      message: `Better luck next time — آپ نے ${percent}% حاصل کیے۔ کوشش کریں، آپ بہتر کریں گے!`,
       emoji: "✨",
       type: "soft"
     });
     playSoftConfetti();
   }
-}
 
   // Open result in new tab (detailed)
   const resultWindow = window.open('','_blank');
   const resultHtml = `
-    <html lang="en" dir="ltr">
+    <html lang="ur" dir="rtl">
     <head><meta charset="utf-8"><title>Quiz Result — ${escapeHtml(userName)}</title>
     <style>
       body{font-family:Arial,Helvetica,sans-serif; padding:28px; background:#0f172a; color:#fff}
@@ -273,9 +261,9 @@ function finishQuiz() {
     </head>
     <body>
       <div class="box">
-        <h1>نتیجہ — ${escapeHtml(userName)} / Result</h1>
-<p>کل سوالات: ${total} / Total Questions: ${total}</p>
-<p>صحیح: ${correct} &nbsp; | &nbsp; غلط: ${wrong} / Correct: ${correct} &nbsp; | &nbsp; Wrong: ${wrong}</p>
+        <h1>نتیجہ — ${escapeHtml(userName)}</h1>
+        <p>کل سوالات: ${total}</p>
+        <p>صحیح: ${correct} &nbsp; | &nbsp; غلط: ${wrong}</p>
         <p class="percent">٪ ${percent}</p>
       </div>
     </body>
@@ -292,7 +280,7 @@ function finishQuiz() {
 
 /* ---------- MODAL (animated result) ---------- */
 function showResultModal({title, message, emoji, type}){
-  modalTitle.textContent = title || "نتیجہ / Result";
+  modalTitle.textContent = title || "نتیجہ";
   modalMessage.textContent = message || "";
   modalEmoji.textContent = emoji || "🎉";
   modalMessage.classList.remove('good','bad');
@@ -374,6 +362,7 @@ function playVIPConfetti(){
   }
   setTimeout(()=> fireworksContainer.classList.add('hidden'), 7800);
 }
+
 /* ---------- VIP Melodic Flourish (WebAudio) ---------- */
 function playVIPMelody(){
   if(!window.AudioContext && !window.webkitAudioContext) return;
@@ -402,19 +391,4 @@ function playVIPMelody(){
   const bell = ctx.createOscillator();
   const bellGain = ctx.createGain();
   bell.type = 'sine';
-  bell.frequency.value = 1320;
-  bell.connect(bellGain);
-  bellGain.connect(ctx.destination);
-  bellGain.gain.setValueAtTime(0, now);
-  bell.start(now + 0.2);
-  bellGain.gain.linearRampToValueAtTime(0.18, now + 0.22);
-  bellGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.0);
-  bell.stop(now + 2.05);
-
-  // close AudioContext after a while to release resources
-  setTimeout(()=> { try{ ctx.close(); } catch(e){} }, 3000);
-}
-
-/* ---------- UTILITIES ---------- */
-function escapeHtml(str){ return String(str).replace(/[&<>"'`=\/]/g, function(s){ return ({ '&':"&amp;", '<':"&lt;", '>':"&gt;", '"':"&quot;", "'":"&#39;", '/':"&#x2F;", '`':"&#x60;", '=':"&#x3D;"}[s]); }); }
-function unescapeHtml(s){ return String(s).replace(/&amp;|&lt;|&gt;|&quot;|&#39;|&#x2F;|&#x60;|&#x3D;/g, function(m){ return ({ "&amp;":"&", "&lt;":"<", "&gt;":">", "&quot;":'"', "&#39;":"'", "&#x2F;":"/", "&#x60;":"`", "&#x3D;":"=" }[m]); }); }
+  bell.frequency.value = 1320
