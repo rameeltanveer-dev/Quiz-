@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CSS Quiz — Final</title>
+  <!-- Link to external CSS (place style.css in same folder) -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <!-- LOGIN / START -->
+    <section id="loginSection" class="card">
+      <h1>Enter Your Name</h1>
+      <input id="nameInput" type="text" placeholder="Type your name" autocomplete="off" />
+      <button id="startWithName" class="btn primary">Start Quiz</button>
+      <p id="loginMsg" class="msg" aria-live="polite"></p>
+
+      <hr class="muted-hr" />
+
+      <h2>Admin Info (For admin use only)</h2>
+      <input type="text" placeholder="0XXXXXXXXXX" value="03196393269" readonly />
+      <input type="text" placeholder="admin@example.com" value="rameeltanveer19@gmail.com" readonly />
+      <small class="muted">For admin use only</small>
+    </section>
+
+    <!-- QUIZ APP -->
+    <section id="quizApp" class="card hidden" aria-hidden="true">
+      <div class="quiz-header">
+        <div class="left">
+          <span id="progressText">Question 0 / 0</span>
+          <span id="topicBadge" class="badge">Topic</span>
+        </div>
+        <div class="right timers">
+          <span class="timer"><strong>Total Time:</strong> <span id="globalTimer">00:00</span></span>
+          <span class="timer"><strong>Q Timer:</strong> <span id="qTimer">00:00</span></span>
+        </div>
+      </div>
+
+      <h2 id="questionText" class="question">Question will appear here</h2>
+
+      <div id="optionsList" class="options-list" aria-live="polite"></div>
+
+      <div class="navigation">
+        <button id="prevBtn" class="btn" disabled>Previous</button>
+        <button id="nextBtn" class="btn" disabled>Next</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Fireworks / Confetti container (used for celebrations) -->
+  <div id="fireworksContainer" class="fireworks hidden" aria-hidden="true"></div>
+
+  <!-- Result Modal (animated) -->
+  <div id="resultModal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <div id="modalEmoji" class="modal-emoji">🎉</div>
+      <h2 id="modalTitle" class="modal-title">Result</h2>
+      <p id="modalMessage" class="modal-message">You scored X%</p>
+      <div class="modal-actions">
+        <button id="modalClose" class="btn">Close</button>
+        <button id="modalDetails" class="btn primary">View Details</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- External fireworks audio (Pixabay) -->
+  <audio id="fireworksAudio" preload="auto" src="https://cdn.pixabay.com/audio/2022/03/15/audio_17d157e94f.mp3"></audio>
+
+  <!-- Link to external JS (place script.js in same folder) -->
+  <script src="script.js"></script>
+</body>
+</html>
