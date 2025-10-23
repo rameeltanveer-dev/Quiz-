@@ -157,7 +157,8 @@ function loadQuestion(){
   answeredThisQ = false;
   nextBtn.disabled = true;
   const item = questions[current];
-  progressText.textContent = `سوال ${current+1} / ${questions.length}`;
+  progressText.innerHTML = `<span>Question ${current + 1} / ${questions.length}</span> 
+                          <span style="font-family: 'Noto Nastaliq Urdu', serif;"> | سوال ${current + 1} / ${questions.length}</span>`;
   topicBadge.textContent = item.topic;
   questionText.textContent = item.q;
   const opts = shuffle(item.o.slice());
