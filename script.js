@@ -91,8 +91,13 @@ function markAttempt(name){ const key = `quiz_attempt_${name.toLowerCase()}`; lo
 startWithName.addEventListener('click', ()=>{
   const val = nameInput.value.trim();
   loginMsg.textContent = "";
-  if(!val){ loginMsg.textContent = "براہِ کرم اپنا نام لکھیں"; return; }
-  if(!canAttempt(val)){ loginMsg.textContent = "اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے"; return; }
+ if(!val){ 
+    loginMsg.textContent = "براہِ کرم اپنا نام لکھیں / Please enter your name"; 
+    return; 
+}if(!canAttempt(val)){ 
+    loginMsg.textContent = "اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے / This device has already attempted the quiz with this name"; 
+    return; 
+}
   userName = val; markAttempt(userName); beginQuiz();
 });
 
@@ -227,8 +232,8 @@ function finishQuiz(){
   } else if(percent >= 70){
     // Normal celebration
     showResultModal({
-      title: "🎉 مبارک ہو!",
-      message: `آپ نے ${percent}% حاصل کیے — شاندار کارکردگی!`,
+      title: "🎉 مبارک ہو! / Congratulations!",
+message: `آپ نے ${percent}% حاصل کیے — شاندار کارکردگی! / You scored ${percent}% — Excellent performance!`,
       emoji: "🎊",
       type: "success"
     });
@@ -237,8 +242,8 @@ function finishQuiz(){
   } else {
     // Better luck
     showResultModal({
-      title: "😌 کوشش جاری رکھیں",
-      message: `Better luck next time — آپ نے ${percent}% حاصل کیے۔ کوشش کریں، آپ بہتر کریں گے!`,
+      title: "😌 کوشش جاری رکھیں / Keep Trying",
+message: `Better luck next time — آپ نے ${percent}% حاصل کیے۔ کوشش کریں، آپ بہتر کریں گے! / You scored ${percent}%. Keep trying, you can do better!`,
       emoji: "✨",
       type: "soft"
     });
@@ -248,7 +253,7 @@ function finishQuiz(){
   // Open result in new tab (detailed)
   const resultWindow = window.open('','_blank');
   const resultHtml = `
-    <html lang="ur" dir="rtl">
+    <html lang="en" dir="ltr">
     <head><meta charset="utf-8"><title>Quiz Result — ${escapeHtml(userName)}</title>
     <style>
       body{font-family:Arial,Helvetica,sans-serif; padding:28px; background:#0f172a; color:#fff}
@@ -261,9 +266,9 @@ function finishQuiz(){
     </head>
     <body>
       <div class="box">
-        <h1>نتیجہ — ${escapeHtml(userName)}</h1>
-        <p>کل سوالات: ${total}</p>
-        <p>صحیح: ${correct} &nbsp; | &nbsp; غلط: ${wrong}</p>
+        <h1>نتیجہ — ${escapeHtml(userName)} / Result</h1>
+<p>کل سوالات: ${total} / Total Questions: ${total}</p>
+<p>صحیح: ${correct} &nbsp; | &nbsp; غلط: ${wrong} / Correct: ${correct} &nbsp; | &nbsp; Wrong: ${wrong}</p>
         <p class="percent">٪ ${percent}</p>
       </div>
     </body>
@@ -280,7 +285,7 @@ function finishQuiz(){
 
 /* ---------- MODAL (animated result) ---------- */
 function showResultModal({title, message, emoji, type}){
-  modalTitle.textContent = title || "نتیجہ";
+  modalTitle.textContent = title || "نتیجہ / Result";
   modalMessage.textContent = message || "";
   modalEmoji.textContent = emoji || "🎉";
   modalMessage.classList.remove('good','bad');
