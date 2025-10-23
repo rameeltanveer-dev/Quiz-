@@ -50,7 +50,20 @@ const BANK = [
   {q:"Which selects class in CSS?", a:".classname", o:["#classname",".classname","classname","*classname"], topic:"Misc"},
   {q:"Which property centers inline text?", a:"text-align", o:["align","text-align","center-inline","inline-align"], topic:"Misc"}
 ];
+/* ---------- FIREWORKS AUDIO SETUP ---------- */
+const fireworksAudio = new Audio("https://cdn.pixabay.com/download/audio/2022/03/10/audio_197b88c681.mp3?filename=fireworks-10-419029.mp3");
 
+document.body.addEventListener("click", () => {
+  fireworksAudio.play().then(() => {
+    fireworksAudio.pause();
+    fireworksAudio.currentTime = 0;
+  }).catch(() => {});
+}, { once: true });
+
+function playFireworks() {
+  fireworksAudio.currentTime = 0;
+  fireworksAudio.play();
+}
 /* ---------- STATE ---------- */
 let userName = null;
 let questions = [];
