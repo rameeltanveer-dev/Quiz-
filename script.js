@@ -90,9 +90,17 @@ function markAttempt(name){ const key = `quiz_attempt_${name.toLowerCase()}`; lo
 /* ---------- START CLICK ---------- */
 startWithName.addEventListener('click', ()=>{
   const val = nameInput.value.trim();
-  loginMsg.textContent = "";
-  if(!val){ loginMsg.textContent = "براہِ کرم اپنا نام لکھیں"; return; }
-  if(!canAttempt(val)){ loginMsg.textContent = "اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے"; return; }
+  loginMsg.textContent = "";if (!val) { 
+  // If no name entered — اگر نام نہیں لکھا گیا
+  loginMsg.textContent = "براہِ کرم اپنا نام لکھیں / Please enter your name"; 
+  return; 
+}
+
+if (!canAttempt(val)) { 
+  // If this device has already attempted the quiz with this name — اگر اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے
+  loginMsg.textContent = "اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے / This name has already been used on this device"; 
+  return; 
+}
   userName = val; markAttempt(userName); beginQuiz();
 });
 
@@ -216,10 +224,10 @@ function finishQuiz(){
   if(percent >= 90){
     // VIP
     showResultModal({
-      title: "👑 VIP فتح!",
-      message: `زبردست! آپ نے ${percent}% حاصل کیے — VIP Celebration!`,
-      emoji: "👑",
-      type: "vip"
+      title: "👑 VIP فتح! / VIP Victory!", 
+message: `زبردست! آپ نے ${percent}% حاصل کیے — VIP Celebration! / Amazing! You scored ${percent}% — VIP Celebration!`, 
+emoji: "👑", 
+type: "vip"
     });
     // VIP sound using WebAudio
     try { playVIPMelody(); } catch(e){ console.warn(e); }
@@ -227,9 +235,9 @@ function finishQuiz(){
   } else if(percent >= 70){
     // Normal celebration
     showResultModal({
-      title: "🎉 مبارک ہو!",
-      message: `آپ نے ${percent}% حاصل کیے — شاندار کارکردگی!`,
-      emoji: "🎊",
+      title: "🎉 مبارک ہو! / Congratulations!", 
+message: `آپ نے ${percent}% حاصل کیے — شاندار کارکردگی! / You scored ${percent}% — Excellent Performance!`, 
+emoji: "🎊",
       type: "success"
     });
     try { fireworksAudio.currentTime = 0; fireworksAudio.play(); } catch(e){}
@@ -237,9 +245,9 @@ function finishQuiz(){
   } else {
     // Better luck
     showResultModal({
-      title: "😌 کوشش جاری رکھیں",
-      message: `Better luck next time — آپ نے ${percent}% حاصل کیے۔ کوشش کریں، آپ بہتر کریں گے!`,
-      emoji: "✨",
+      title: "😌 کوشش جاری رکھیں / Keep Trying", 
+message: `آپ نے ${percent}% حاصل کیے۔ کوشش کریں، آپ بہتر کریں گے! / You scored ${percent}%. Keep trying, you can do better!`, 
+emoji: "✨",
       type: "soft"
     });
     playSoftConfetti();
@@ -248,7 +256,7 @@ function finishQuiz(){
   // Open result in new tab (detailed)
   const resultWindow = window.open('','_blank');
   const resultHtml = `
-    <html lang="ur" dir="rtl">
+    <html lang="en" dir="ltr">
     <head><meta charset="utf-8"><title>Quiz Result — ${escapeHtml(userName)}</title>
     <style>
       body{font-family:Arial,Helvetica,sans-serif; padding:28px; background:#0f172a; color:#fff}
@@ -280,7 +288,7 @@ function finishQuiz(){
 
 /* ---------- MODAL (animated result) ---------- */
 function showResultModal({title, message, emoji, type}){
-  modalTitle.textContent = title || "نتیجہ";
+  modalTitle.textContent = title || "نتیجہ / Result";
   modalMessage.textContent = message || "";
   modalEmoji.textContent = emoji || "🎉";
   modalMessage.classList.remove('good','bad');
