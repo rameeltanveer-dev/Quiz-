@@ -212,43 +212,50 @@ function goNextAfterAuto(){
 }
 
 /* ---------- FINISH QUIZ ---------- */
-function finishQuiz(){
-  stopGlobalTimer(); stopQuestionTimer();
+function finishQuiz() {
+  stopGlobalTimer();
+  stopQuestionTimer();
+
   const total = questions.length;
-  const percent = Math.round((correct/total)*100);
+  const percent = Math.round((correct / total) * 100);
 
   // Decide celebration level
-  if(percent >= 90){
-    // VIP
+  if (percent >= 90) {
+    // VIP Celebration
     showResultModal({
       title: "👑 VIP فتح!",
       message: `زبردست! آپ نے ${percent}% حاصل کیے — VIP Celebration!`,
       emoji: "👑",
       type: "vip"
     });
-    // VIP sound using WebAudio
-    try { playVIPMelody(); } catch(e){ console.warn(e); }
+    try { playVIPMelody(); } catch (e) { console.warn(e); }
     playVIPConfetti();
-  } else if(percent >= 70){
-    // Normal celebration
+
+  } else if (percent >= 70) {
+    // Normal Celebration (70–89%)
     showResultModal({
       title: "🎉 مبارک ہو! / Congratulations!",
-message: `آپ نے ${percent}% حاصل کیے — شاندار کارکردگی! / You scored ${percent}% — Excellent performance!`,
+      message: `آپ نے ${percent}% حاصل کیے — شاندار کارکردگی! / You scored ${percent}% — Excellent performance!`,
       emoji: "🎊",
       type: "success"
     });
-    try { fireworksAudio.currentTime = 0; fireworksAudio.play(); } catch(e){}
+    try {
+      fireworksAudio.currentTime = 0;
+      fireworksAudio.play(); // 🔥 Safe autoplay
+    } catch (e) { console.warn(e); }
     playFireworks();
+
   } else {
-    // Better luck
+    // Better Luck (<70%)
     showResultModal({
       title: "😌 کوشش جاری رکھیں / Keep Trying",
-message: `Better luck next time — آپ نے ${percent}% حاصل کیے۔ کوشش کریں، آپ بہتر کریں گے! / You scored ${percent}%. Keep trying, you can do better!`,
+      message: `Better luck next time — آپ نے ${percent}% حاصل کیے۔ کوشش کریں، آپ بہتر کریں گے! / You scored ${percent}%. Keep trying, you can do better!`,
       emoji: "✨",
       type: "soft"
     });
     playSoftConfetti();
   }
+}
 
   // Open result in new tab (detailed)
   const resultWindow = window.open('','_blank');
