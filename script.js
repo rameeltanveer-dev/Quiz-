@@ -95,7 +95,13 @@ startWithName.addEventListener('click', ()=>{
   loginMsg.textContent = "براہِ کرم اپنا نام لکھیں / Please enter your name"; 
   return; 
 }
-
+if (!canAttempt(val)) { 
+  // If this device has already attempted the quiz with this name — اگر اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے
+  loginMsg.textContent = "اس نام سے اس ڈیوائس پر پہلے ہی کوئز حل کیا جا چکا ہے / This name has already been used on this device"; 
+  return; 
+}
+  userName = val; markAttempt(userName); beginQuiz();
+});
 
 
 /* ---------- BEGIN QUIZ ---------- */
