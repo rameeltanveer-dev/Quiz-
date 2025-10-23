@@ -391,4 +391,19 @@ function playVIPMelody(){
   const bell = ctx.createOscillator();
   const bellGain = ctx.createGain();
   bell.type = 'sine';
-  bell.frequency.value = 1320
+  bell.frequency.value = 1320;
+  bell.connect(bellGain);
+  bellGain.connect(ctx.destination);
+  bellGain.gain.setValueAtTime(0, now);
+  bell.start(now + 0.2);
+  bellGain.gain.linearRampToValueAtTime(0.18, now + 0.22);
+  bellGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.0);
+  bell.stop(now + 2.05);
+
+  // close AudioContext after a while to release resources
+  setTimeout(()=> { try{ ctx.close(); } catch(e){} }, 3000);
+}
+
+/* ---------- UTILITIES ---------- */
+function escapeHtml(str){ return String(str).replace(/[&<>"'`=\/]/g, function(s){ return ({ '&':"&amp;", '<':"&lt;", '>':"&gt;", '"':"&quot;", "'":"&#39;", '/':"&#x2F;", '`':"&#x60;", '=':"&#x3D;"}[s]); }); }
+function unescapeHtml(s){ return String(s).replace(/&amp;|&lt;|&gt;|&quot;|&#39;|&#x2F;|&#x60;|&#x3D;/g, function(m){ return ({ "&amp;":"&", "&lt;":"<", "&gt;":">", "&quot;":'"', "&#39;":"'", "&#x2F;":"/", "&#x60;":"`", "&#x3D;":"=" }[m]); }); }
