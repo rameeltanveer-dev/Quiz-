@@ -412,20 +412,3 @@ function playVIPMelody(){
 /* ---------- UTILITIES ---------- */
 function escapeHtml(str){ return String(str).replace(/[&<>"'`=\/]/g, function(s){ return ({ '&':"&amp;", '<':"&lt;", '>':"&gt;", '"':"&quot;", "'":"&#39;", '/':"&#x2F;", '`':"&#x60;", '=':"&#x3D;"}[s]); }); }
 function unescapeHtml(s){ return String(s).replace(/&amp;|&lt;|&gt;|&quot;|&#39;|&#x2F;|&#x60;|&#x3D;/g, function(m){ return ({ "&amp;":"&", "&lt;":"<", "&gt;":">", "&quot;":'"', "&#39;":"'", "&#x2F;":"/", "&#x60;":"`", "&#x3D;":"=" }[m]); }); }
-const fireworksAudio = new Audio("https://cdn.pixabay.com/download/audio/2022/03/10/audio_197b88c681.mp3?filename=fireworks-10-419029.mp3");
-
-document.body.addEventListener("click", () => {
-  fireworksAudio.play().then(() => {
-    fireworksAudio.pause();
-    fireworksAudio.currentTime = 0;
-  }).catch(() => {});
-}, { once: true });
-
-function playFireworks() {
-  fireworksAudio.currentTime = 0;
-  fireworksAudio.play();
-}
-if (percent >= 70) {
-  playFireworks(); // 🔥 Safe autoplay
-  alert("🎉 Congratulations! You scored " + percent + "%");
-}
